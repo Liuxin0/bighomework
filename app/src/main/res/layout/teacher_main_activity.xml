@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_main_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.a1111.term4_homework.teacher.TeacherMainActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/teacher_main_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/teacher_main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+
+    <!--中间页面-->
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <fragment
+            android:id="@+id/teacher_firstitem_container"
+            android:name="com.example.a1111.term4_homework.teacher.first.FirstItemListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!--<fragment-->
+            <!--android:id="@+id/teacher_seconditem_container"-->
+            <!--android:name="com.example.a1111.term4_homework.teacher.second.SecondActivity"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+
+    </RelativeLayout>
+    <!--中间页面-->
+
+
+    <!--<android.support.design.widget.BottomNavigationView-->
+        <!--android:id="@+id/teacher_main_navigation"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:background="?android:attr/windowBackground"-->
+        <!--app:menu="@menu/teacher_navigation" />-->
+
+</LinearLayout>
