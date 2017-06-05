@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".settings.SettingsActivity"
+    tools:showIn="@layout/settings_activity">
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/text_margin"-->
+        <!--android:text="@string/large_text" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            android:clickable="true"
+            app:cardElevation="6dp">
+            <TextView
+                android:id="@+id/student_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:maxLines="1"
+                android:textSize="@dimen/text_size"
+                android:text="0151122122"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            android:layout_marginTop="1dp"
+            android:clickable="true"
+            app:cardElevation="6dp">
+            <TextView
+                android:id="@+id/student_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:maxLines="1"
+                android:textSize="@dimen/text_size"
+                android:text="Hachi"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            android:layout_marginTop="1dp"
+            android:clickable="true"
+            app:cardElevation="6dp">
+            <TextView
+                android:id="@+id/student_sex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:maxLines="1"
+                android:textSize="@dimen/text_size"
+                android:text="sex"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            android:layout_marginTop="1dp"
+            android:clickable="true"
+            app:cardElevation="6dp">
+            <TextView
+                android:id="@+id/student_dept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:maxLines="1"
+                android:textSize="@dimen/text_size"
+                android:text="dept"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            android:layout_marginTop="1dp"
+            android:clickable="true"
+            app:cardElevation="6dp">
+            <TextView
+                android:id="@+id/student_clo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:maxLines="1"
+                android:textSize="@dimen/text_size"
+                android:text="clo"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/settings_exit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:backgroundTintMode="src_over"
+            app:cardBackgroundColor="#ff4081"
+            android:clickable="true"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            app:cardElevation="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/small_title"
+                android:text="@string/exit"/>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>
