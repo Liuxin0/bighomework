@@ -168,17 +168,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        //return error
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(null);
-        }
-        if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(null);
+        boolean cancel = false;
+        View focusView = null;
+
+        // 检查密码是否为空
+        if (!TextUtils.isEmpty(email) && TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
         }
 
-        //login
-        showProgress(true);
-        UserLogin(email,password);
+        // 检查用户名是否为空
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            focusView.requestFocus();
+        } else {
+            //login
+            showProgress(true);
+            UserLogin(email,password);
+        }
+
     }
 
     /**
