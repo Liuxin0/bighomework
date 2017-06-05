@@ -32,11 +32,17 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.a1111.term4_homework.interface_.HttpCallbackListener;
+import com.example.a1111.term4_homework.model.LoginModel;
 import com.example.a1111.term4_homework.student.StudentMainActivity;
 import com.example.a1111.term4_homework.R;
 import com.example.a1111.term4_homework.teacher.TeacherMainActivity;
+import com.example.a1111.term4_homework.util.DataUtil;
+import com.example.a1111.term4_homework.util.HttpUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -59,11 +65,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-    boolean goTeacher;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -80,11 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    goTeacher = true;
-                } else {
-                    goTeacher = false;
-                }
+
             }
         });
 
@@ -166,60 +163,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
+        //return error
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isUsernameValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
+            mEmailView.setError(null);
+        }
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(null);
         }
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
-        }
-    }
-
-    private boolean isUsernameValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("0");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        //login
+        showProgress(true);
+        UserLogin(email,password);
     }
 
     /**
@@ -313,66 +272,57 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * 登录函数
+     * @param username
+     * @param password
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+    public void UserLogin(String username,String password){
+        final HashMap<String,String>map=new HashMap<>();
+        map.put("username",username);
+        map.put("password",password);
+        HttpUtils.post("http://183.175.12.176:8080/login", map, new HttpCallbackListener.StringCallBack() {
+            @Override
+            public void OnRequest(String response) {
+                showProgress(false);
+                LoginModel model=new Gson().fromJson(response,LoginModel.class);
+                if(model!=null&&model.getState()!=0){
+                    //存储用户信息
+                    saveUserInformation(model);
+                    Intent intent = null;
+                    if (model.getUser().getKind()!=1)
+                        intent=new Intent(getApplication(), TeacherMainActivity.class);
+                    else
+                        intent = new Intent(getApplication(), StudentMainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    mPasswordView.setError(model.getMsg());
+                    mPasswordView.requestFocus();
                 }
             }
 
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                Intent intent;
-                if (goTeacher)
-                    intent=new Intent(getApplication(), TeacherMainActivity.class);
-                else
-                    intent = new Intent(getApplication(), StudentMainActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+            @Override
+            public void OnFailure(Exception e) {
+                showProgress(false);
             }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
+        });
     }
+
+    /**
+     * 将用户信息存于本地
+     * @param model
+     */
+    private void saveUserInformation(LoginModel model) {
+        DataUtil util = new DataUtil("userinformation",getApplicationContext());
+        util.saveData("userid",model.getUser().getUserid()+"");
+        util.saveData("username",model.getUser().getUsername());
+        util.saveData("password",model.getUser().getPassword());
+        util.saveData("truename",model.getUser().getTruename());
+        util.saveData("collage",model.getUser().getCollage());
+        util.saveData("course",model.getUser().getCourse());
+        util.saveData("dept",model.getUser().getDept());
+        util.saveData("sex",model.getUser().getSex());
+    }
+
 }
 
