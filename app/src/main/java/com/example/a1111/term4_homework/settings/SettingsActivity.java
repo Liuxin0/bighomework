@@ -16,6 +16,7 @@ import com.example.a1111.term4_homework.R;
 import com.example.a1111.term4_homework.login.LoginActivity;
 import com.example.a1111.term4_homework.teacher.first.FirstItemListFragment;
 import com.example.a1111.term4_homework.util.DataUtil;
+import com.example.a1111.term4_homework.util.FinishListActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -24,6 +25,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
+        ////注册finish()
+        FinishListActivity.getInstance().addActivity(this);
 
         //显示个人信息
         setText();
@@ -54,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplication(), LoginActivity.class);
                 clearCookies();
                 startActivity(intent);
-                finish();
+                FinishListActivity.getInstance().exit();
             }
         });
     }

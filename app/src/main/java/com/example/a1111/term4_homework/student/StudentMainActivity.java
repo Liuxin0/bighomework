@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.a1111.term4_homework.R;
 import com.example.a1111.term4_homework.settings.SettingsActivity;
+import com.example.a1111.term4_homework.util.FinishListActivity;
 
 public class StudentMainActivity extends AppCompatActivity {
 
@@ -56,6 +57,8 @@ public class StudentMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_main_activity);
+        //注册finish()
+        FinishListActivity.getInstance().addActivity(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.student_main_toolbar);
         setSupportActionBar(toolbar);
