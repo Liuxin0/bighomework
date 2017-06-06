@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,16 @@ import android.widget.TextView;
 
 
 import com.example.a1111.term4_homework.R;
+import com.example.a1111.term4_homework.interface_.HttpCallbackListener;
+import com.example.a1111.term4_homework.model.STHomeModel;
 import com.example.a1111.term4_homework.student.first.dummy.DummyContent;
+import com.example.a1111.term4_homework.util.DataUtil;
+import com.example.a1111.term4_homework.util.HttpUtils;
+import com.example.a1111.term4_homework.util.L;
+import com.google.gson.Gson;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,11 +44,13 @@ public class FirstItemListFragment extends Fragment {
      * device.
      */
     private boolean mTwoPane;
+    View recyclerView;
+    SimpleItemRecyclerViewAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_firstitem_list_student,container);
+        View view = inflater.inflate(R.layout.fragment_firstitem_list_student, container);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -50,9 +61,7 @@ public class FirstItemListFragment extends Fragment {
             }
         });
 
-        View recyclerView = view.findViewById(R.id.firstitem_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        recyclerView = view.findViewById(R.id.firstitem_list);
 
         if (view.findViewById(R.id.student_firstitem_detail_container) != null) {
             // The detail container view will be present only in the
@@ -62,20 +71,53 @@ public class FirstItemListFragment extends Fragment {
             mTwoPane = true;
         }
 
+        getData();
+
         return view;
     }
 
+    //
+    private void getData() {
+        HashMap<String, String> map = new HashMap<>();
+        DataUtil util = new DataUtil("userinformation", getActivity());
+        map.put("userid", util.getData("userid", ""));
+        HttpUtils.get("http://183.175.12.176:8080/home", map, new HttpCallbackListener.StringCallBack() {
+            @Override
+            public void OnRequest(String response) {
+                STHomeModel model = new Gson().fromJson(response, STHomeModel.class);
+                if (model.getState() != 0) {
+                    adapter = new SimpleItemRecyclerViewAdapter(model.getVideos());
+                    callback.success();
+                } else {
+                    L.e("home", model.getMsg());
+                }
+            }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+            @Override
+            public void OnFailure(Exception e) {
+                L.e("home", e.getLocalizedMessage());
+            }
+        });
     }
+
+
+    interface Callback {
+        void success();
+    }
+
+    Callback callback = new Callback() {
+        @Override
+        public void success() {
+            ((RecyclerView) recyclerView).setAdapter(adapter);
+        }
+    };
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<STHomeModel.VideosBean> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<STHomeModel.VideosBean> items) {
             mValues = items;
         }
 
@@ -87,17 +129,18 @@ public class FirstItemListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getVideoid() + "");
+            holder.mContentView.setText("标题" + mValues.get(position).getTitle()
+                    + "  课程" + mValues.get(position).getSubject());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(FirstItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putSerializable("video", mValues.get(position));
                         FirstItemDetailFragment fragment = new FirstItemDetailFragment();
                         fragment.setArguments(arguments);
                         getActivity().getFragmentManager().beginTransaction()
@@ -106,7 +149,7 @@ public class FirstItemListFragment extends Fragment {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, FirstItemDetailActivity.class);
-                        intent.putExtra(FirstItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(FirstItemDetailFragment.ARG_ITEM_ID, holder.mItem.getVideoid() + "");
 
                         context.startActivity(intent);
                     }
@@ -123,7 +166,7 @@ public class FirstItemListFragment extends Fragment {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public STHomeModel.VideosBean mItem;
 
             public ViewHolder(View view) {
                 super(view);

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.a1111.term4_homework.R;
 import com.example.a1111.term4_homework.login.LoginActivity;
 import com.example.a1111.term4_homework.teacher.first.FirstItemListFragment;
+import com.example.a1111.term4_homework.util.DataUtil;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -23,17 +24,14 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
+
+        //显示个人信息
+        setText();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         toolbar.setTitle("个人信息");
 
         setSupportActionBar(toolbar);
-
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -66,7 +64,12 @@ public class SettingsActivity extends AppCompatActivity {
         TextView sexText = (TextView) findViewById(R.id.student_sex);
         TextView deptText = (TextView) findViewById(R.id.student_dept);
         TextView cloText = (TextView) findViewById(R.id.student_clo);
-
+        DataUtil util=new DataUtil("userinformation",getApplicationContext());
+        studentIdText.setText(util.getData("username","未绑定"));
+        trueNameText.setText(util.getData("truename","未绑定"));
+        sexText.setText(util.getData("sex","未绑定"));
+        deptText.setText(util.getData("dept","未绑定"));
+        cloText.setText(util.getData("collage","未绑定"));
     }
 
     @Override

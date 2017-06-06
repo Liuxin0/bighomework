@@ -1,6 +1,16 @@
 package com.example.a1111.term4_homework.student.first.dummy;
 
+import android.content.Context;
+
+import com.example.a1111.term4_homework.interface_.HttpCallbackListener;
+import com.example.a1111.term4_homework.model.STHomeModel;
+import com.example.a1111.term4_homework.util.DataUtil;
+import com.example.a1111.term4_homework.util.HttpUtils;
+import com.example.a1111.term4_homework.util.L;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +23,15 @@ import java.util.Map;
  */
 public class DummyContent {
 
+    public DummyContent() {
+
+    }
+
+    public DummyContent(Context context) {
+        this.context = context;
+    }
+
+    private static Context context;
     /**
      * An array of sample (dummy) items.
      */
@@ -27,9 +46,10 @@ public class DummyContent {
 
     static {
         // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
-        }
+//        for (int i = 1; i <= COUNT; i++) {
+//            addItem(createDummyItem(i));
+//        }
+
     }
 
     private static void addItem(DummyItem item) {
