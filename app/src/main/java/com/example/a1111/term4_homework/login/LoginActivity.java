@@ -39,6 +39,7 @@ import com.example.a1111.term4_homework.R;
 import com.example.a1111.term4_homework.teacher.TeacherMainActivity;
 import com.example.a1111.term4_homework.util.DataUtil;
 import com.example.a1111.term4_homework.util.HttpUtils;
+import com.example.a1111.term4_homework.util.L;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -192,7 +193,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             UserLogin(email,password);
         }
-
     }
 
     /**

@@ -54,6 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplication(), LoginActivity.class);
                 clearCookies();
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -90,5 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void clearCookies(){
         //清除登录数据
+        DataUtil util=new DataUtil("userinformation",getApplicationContext());
+        util.clearData();
     }
 }
