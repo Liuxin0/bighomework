@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.example.a1111.term4_homework.R;
 import com.example.a1111.term4_homework.teacher.first.dummy.DummyContent;
 
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+
 /**
  * A fragment representing a single FirstItem detail screen.
  * This fragment is either contained in a {@link FirstItemListFragment}
@@ -47,11 +49,6 @@ public class FirstItemDetailFragment extends Fragment {
             // to load content from a content provider.
             mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.teacher_detail_toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
-            }
         }
     }
 
@@ -59,6 +56,11 @@ public class FirstItemDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.teacher_firstitem_detail, container, false);
+
+        JCVideoPlayerStandard jcVideoPlayerStandard = (JCVideoPlayerStandard) rootView.findViewById(R.id.videoplayer);
+        jcVideoPlayerStandard.setUp("http://2449.vod.myqcloud.com/2449_22ca37a6ea9011e5acaaf51d105342e3.f20.mp4"
+                , JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "嫂子闭眼睛");
+        jcVideoPlayerStandard.thumbImageView.setImageResource(R.mipmap.my_add);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {

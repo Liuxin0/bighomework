@@ -63,7 +63,9 @@
         <activity
             android:name=".teacher.first.FirstItemDetailActivity"
             android:label="@string/title_firstitem_detail"
-            android:theme="@style/AppTheme.NoActionBar.full"/>
+            android:theme="@style/AppTheme.NoActionBar.full"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"

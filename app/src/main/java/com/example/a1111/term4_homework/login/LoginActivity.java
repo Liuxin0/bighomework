@@ -78,11 +78,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_login_activity);
 
+        //测试用
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.login_switch);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
+                goTeacher=b;
             }
         });
 
@@ -157,6 +158,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    //测试用
+    private boolean goTeacher = false;
+    private void test() {
+        if (goTeacher){
+            Intent intent = new Intent(getApplication(), TeacherMainActivity.class);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(getApplication(), StudentMainActivity.class);
+            startActivity(intent);
+        }
+        finish();
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -166,11 +179,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void attemptLogin() {
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString()+"";
-        String password = mPasswordView.getText().toString()+"";
+        String email = mEmailView.getText().toString() + "";
+        String password = mPasswordView.getText().toString() + "";
 
         boolean cancel = false;
         View focusView = null;
+
+        //测试用
+        if (email.equals("0")) {
+            test();
+        }
+        //测试用
 
         // 检查密码是否为空
         if (!TextUtils.isEmpty(email) && TextUtils.isEmpty(password)) {
@@ -191,7 +210,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             //login
             showProgress(true);
-            UserLogin(email,password);
+            UserLogin(email, password);
         }
     }
 
@@ -287,29 +306,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * 登录函数
+     *
      * @param username
      * @param password
      */
-    public void UserLogin(String username,String password){
-        final HashMap<String,String>map=new HashMap<>();
-        map.put("username",username);
-        map.put("password",password);
+    public void UserLogin(String username, String password) {
+        final HashMap<String, String> map = new HashMap<>();
+        map.put("username", username);
+        map.put("password", password);
         HttpUtils.post("http://183.175.12.176:8080/login", map, new HttpCallbackListener.StringCallBack() {
             @Override
             public void OnRequest(String response) {
                 showProgress(false);
-                LoginModel model=new Gson().fromJson(response,LoginModel.class);
-                if(model!=null&&model.getState()!=0){
+                LoginModel model = new Gson().fromJson(response, LoginModel.class);
+                if (model != null && model.getState() != 0) {
                     //存储用户信息
                     saveUserInformation(model);
                     Intent intent = null;
-                    if (model.getUser().getKind()!=1)
-                        intent=new Intent(getApplication(), TeacherMainActivity.class);
+                    if (model.getUser().getKind() != 1)
+                        intent = new Intent(getApplication(), TeacherMainActivity.class);
                     else
                         intent = new Intent(getApplication(), StudentMainActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
+                } else {
                     mPasswordView.setError(model.getMsg());
                     mPasswordView.requestFocus();
                 }
@@ -324,18 +344,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     /**
      * 将用户信息存于本地
+     *
      * @param model
      */
     private void saveUserInformation(LoginModel model) {
-        DataUtil util = new DataUtil("userinformation",getApplicationContext());
-        util.saveData("userid",model.getUser().getUserid()+"");
-        util.saveData("username",model.getUser().getUsername());
-        util.saveData("password",model.getUser().getPassword());
-        util.saveData("truename",model.getUser().getTruename());
-        util.saveData("collage",model.getUser().getCollage());
-        util.saveData("course",model.getUser().getCourse());
-        util.saveData("dept",model.getUser().getDept());
-        util.saveData("sex",model.getUser().getSex());
+        DataUtil util = new DataUtil("userinformation", getApplicationContext());
+        util.saveData("userid", model.getUser().getUserid() + "");
+        util.saveData("username", model.getUser().getUsername());
+        util.saveData("password", model.getUser().getPassword());
+        util.saveData("truename", model.getUser().getTruename());
+        util.saveData("collage", model.getUser().getCollage());
+        util.saveData("course", model.getUser().getCourse());
+        util.saveData("dept", model.getUser().getDept());
+        util.saveData("sex", model.getUser().getSex());
     }
 
 }
