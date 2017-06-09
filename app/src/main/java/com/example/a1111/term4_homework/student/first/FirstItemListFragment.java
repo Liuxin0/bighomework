@@ -43,7 +43,6 @@ public class FirstItemListFragment extends Fragment {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
     View recyclerView;
     SimpleItemRecyclerViewAdapter adapter;
 
@@ -62,14 +61,6 @@ public class FirstItemListFragment extends Fragment {
         });
 
         recyclerView = view.findViewById(R.id.firstitem_list);
-
-        if (view.findViewById(R.id.student_firstitem_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
 
         getData();
 
@@ -138,21 +129,12 @@ public class FirstItemListFragment extends Fragment {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putSerializable("video", mValues.get(position));
-                        FirstItemDetailFragment fragment = new FirstItemDetailFragment();
-                        fragment.setArguments(arguments);
-                        getActivity().getFragmentManager().beginTransaction()
-                                .replace(R.id.student_firstitem_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, FirstItemDetailActivity.class);
-                        intent.putExtra(FirstItemDetailFragment.ARG_ITEM_ID, holder.mItem.getVideoid() + "");
-
-                        context.startActivity(intent);
-                    }
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, FirstItemDetailActivity.class);
+                    intent.putExtra("videoid",mValues.get(position).getVideoid()+"");
+                    intent.putExtra("title",mValues.get(position).getTitle());
+                    intent.putExtra("url",mValues.get(position).getURL());
+                    context.startActivity(intent);
                 }
             });
         }
