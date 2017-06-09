@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     android:background="@color/cardview_light_background">
 
     <android.support.design.widget.AppBarLayout
@@ -24,4 +25,25 @@
 
     </android.support.design.widget.AppBarLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:hint="视频标题："
+        android:id="@+id/up_video_title"
+        android:layout_margin="5dp"
+        android:layout_height="70dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:hint="视频描述："
+        android:id="@+id/up_video_inf"
+        android:layout_margin="5dp"
+        android:layout_height="70dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:text="上传"
+        android:id="@+id/up_video_upload"
+        android:layout_margin="5dp"
+        android:layout_height="60dp" />
+
+</LinearLayout>

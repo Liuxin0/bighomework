@@ -11,6 +11,10 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.example.a1111.term4_homework.R;
+import com.example.a1111.term4_homework.util.L;
+
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
  * An activity representing a single SecondItem detail screen. This
@@ -20,64 +24,50 @@ import com.example.a1111.term4_homework.R;
  */
 public class SecondItemDetailActivity extends AppCompatActivity {
 
+    private JCVideoPlayerStandard jcVideoPlayerStandard;
+    private String url, title, videoid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_seconditem_detail_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.student_detail_toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        Intent intent = getIntent();
+        url = intent.getStringExtra("url");
+        title = intent.getStringExtra("title");
+        videoid = intent.getStringExtra("videoid");
 
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        L.e("information", url);
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(SecondItemDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(SecondItemDetailFragment.ARG_ITEM_ID));
-            SecondItemDetailFragment fragment = new SecondItemDetailFragment();
-            fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
-                    .add(R.id.seconditem_detail_container, fragment)
-                    .commit();
-        }
+        jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.student_w_videoplayer);
+        jcVideoPlayerStandard
+                .setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, title);
+        jcVideoPlayerStandard.thumbImageView.setImageResource(R.mipmap.my_add);
+
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
             navigateUpTo(new Intent(this, SecondItemListFragment.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (JCVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JCVideoPlayer.releaseAllVideos();
+    }
+
 }

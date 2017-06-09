@@ -55,6 +55,7 @@ public class FirstItemDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onBackPressed() {
         if (JCVideoPlayer.backPress()) {
