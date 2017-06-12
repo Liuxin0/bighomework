@@ -141,7 +141,7 @@ public class SecondActivity extends AppCompatActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        HttpRequest.post(getApplicationContext(), "http://183.175.12.176:8080/upload", params, new AsyncHttpResponseHandler() {
+        HttpRequest.post(getApplicationContext(), "http://www.baiguoqing.com:8080/Dazuoye/upload", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int i, org.apache.http.Header[] headers, byte[] bytes) {
                 BaseModel model = new Gson().fromJson(new String(bytes), BaseModel.class);

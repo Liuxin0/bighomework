@@ -47,7 +47,7 @@ public class ThirdJWXTSetFragment extends Fragment {
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put("cnum", class_no.getText() + "");
                     map.put("cno", class_cno.getText() + "");
-                    HttpUtils.post("http://183.175.12.176:8080/chooseclass", map, new HttpCallbackListener.StringCallBack() {
+                    HttpUtils.post("http://www.baiguoqing.com:8080/Dazuoye/chooseclass", map, new HttpCallbackListener.StringCallBack() {
                         @Override
                         public void OnRequest(String response) {
                             BaseModel model = new Gson().fromJson(response, BaseModel.class);

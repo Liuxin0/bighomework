@@ -26,6 +26,8 @@ public class StudentMainActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
     private long exitTime = 0;
 
+    Toolbar toolbar;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -36,16 +38,19 @@ public class StudentMainActivity extends AppCompatActivity {
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.hide(fragments[1]).hide(fragments[2]).show(fragments[0]);
                     fragmentTransaction.commit();
+                    toolbar.setTitle("Home");
                     return true;
                 case R.id.navigation_dashboard:
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.hide(fragments[0]).hide(fragments[2]).show(fragments[1]);
                     fragmentTransaction.commit();
+                    toolbar.setTitle("Watching");
                     return true;
                 case R.id.navigation_notifications:
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.hide(fragments[0]).hide(fragments[1]).show(fragments[2]);
                     fragmentTransaction.commit();
+                    toolbar.setTitle("Course");
                     return true;
             }
             return false;
@@ -60,9 +65,9 @@ public class StudentMainActivity extends AppCompatActivity {
         //注册finish()
         FinishListActivity.getInstance().addActivity(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.student_main_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.student_main_toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        toolbar.setTitle("Home");
         toolbar.setNavigationIcon(R.mipmap.my_user);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,8 +6,6 @@
     android:name="com.example.a1111.term4_homework.FirstItemListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".student.first.FirstItemListFragment"
     tools:listitem="@layout/student_firstitem_list_content" />

@@ -56,7 +56,7 @@ public class SecondItemListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "欢迎使用云课堂>_<", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -73,7 +73,7 @@ public class SecondItemListFragment extends Fragment {
         HashMap<String, String> map = new HashMap<>();
         DataUtil util = new DataUtil("userinformation", getActivity());
         map.put("userid", util.getData("userid", ""));
-        HttpUtils.get("http://183.175.12.176:8080/getwvideo", map, new HttpCallbackListener.StringCallBack() {
+        HttpUtils.get("http://www.baiguoqing.com:8080/Dazuoye/getwvideo", map, new HttpCallbackListener.StringCallBack() {
             @Override
             public void OnRequest(String response) {
                 STHomeModel model = new Gson().fromJson(response, STHomeModel.class);
@@ -124,17 +124,18 @@ public class SecondItemListFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).getVideoid() + "");
-            holder.mContentView.setText("标题" + mValues.get(position).getTitle()
-                    + "  课程" + mValues.get(position).getSubject());
+            holder.mContentView.setText("<<" + mValues.get(position).getTitle() + ">>");
+            holder.mSubject.setText(mValues.get(position).getSubject() + "");
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, SecondItemDetailActivity.class);
-                    intent.putExtra("videoid",mValues.get(position).getVideoid()+"");
-                    intent.putExtra("title",mValues.get(position).getTitle());
-                    intent.putExtra("url",mValues.get(position).getURL());
+                    intent.putExtra("videoid", mValues.get(position).getVideoid() + "");
+                    intent.putExtra("title", mValues.get(position).getTitle() + "");
+                    intent.putExtra("url", mValues.get(position).getURL() + "");
+                    intent.putExtra("subject", mValues.get(position).getSubject() + "");
                     context.startActivity(intent);
                 }
             });
@@ -149,6 +150,7 @@ public class SecondItemListFragment extends Fragment {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
+            public final TextView mSubject;
             public STHomeModel.VideosBean mItem;
 
             public ViewHolder(View view) {
@@ -156,6 +158,7 @@ public class SecondItemListFragment extends Fragment {
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.student_seconditem_list_content_id);
                 mContentView = (TextView) view.findViewById(R.id.student_seconditem_list_content_main_content);
+                mSubject = (TextView) view.findViewById(R.id.student_seconditem_list_content_subject);
             }
 
             @Override

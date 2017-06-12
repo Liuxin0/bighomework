@@ -45,7 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "欢迎使用云课堂>_<", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

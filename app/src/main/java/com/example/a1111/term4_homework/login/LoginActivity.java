@@ -314,7 +314,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final HashMap<String, String> map = new HashMap<>();
         map.put("username", username);
         map.put("password", password);
-        HttpUtils.post("http://183.175.12.176:8080/login", map, new HttpCallbackListener.StringCallBack() {
+        HttpUtils.post("http://www.baiguoqing.com:8080/Dazuoye/login", map, new HttpCallbackListener.StringCallBack() {
             @Override
             public void OnRequest(String response) {
                 showProgress(false);

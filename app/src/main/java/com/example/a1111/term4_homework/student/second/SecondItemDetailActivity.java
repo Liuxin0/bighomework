@@ -9,6 +9,7 @@ import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.a1111.term4_homework.R;
 import com.example.a1111.term4_homework.util.L;
@@ -25,25 +26,32 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 public class SecondItemDetailActivity extends AppCompatActivity {
 
     private JCVideoPlayerStandard jcVideoPlayerStandard;
-    private String url, title, videoid;
+    private String url, title, videoid, subject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.student_seconditem_detail_activity);
+        setContentView(R.layout.student_firstitem_detail_activity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.student_video_toolbar);
+        toolbar.setTitle("video");
+        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
         title = intent.getStringExtra("title");
         videoid = intent.getStringExtra("videoid");
+        subject = intent.getStringExtra("subject");
 
         L.e("information", url);
 
-        jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.student_w_videoplayer);
+        jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.student_videoplayer);
         jcVideoPlayerStandard
                 .setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, title);
         jcVideoPlayerStandard.thumbImageView.setImageResource(R.mipmap.my_add);
 
+        TextView textView = (TextView) findViewById(R.id.student_video_subject);
+        textView.setText("        " + subject);
 
     }
 
@@ -64,6 +72,7 @@ public class SecondItemDetailActivity extends AppCompatActivity {
         }
         super.onBackPressed();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
