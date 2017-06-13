@@ -44,6 +44,11 @@ public class FirstItemDetailActivity extends AppCompatActivity {
         toolbar.setTitle("video");
         setSupportActionBar(toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
         title = intent.getStringExtra("title");

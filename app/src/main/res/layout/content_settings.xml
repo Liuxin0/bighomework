@@ -25,7 +25,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="@dimen/cardview_default_radius"
             android:clickable="true"
-            app:cardElevation="6dp">
+            app:cardElevation="@dimen/cardview_default_elevation">
             <TextView
                 android:id="@+id/student_id"
                 android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             app:cardCornerRadius="@dimen/cardview_default_radius"
             android:layout_margin="5dp"
             android:clickable="true"
-            app:cardElevation="6dp">
+            app:cardElevation="@dimen/cardview_default_elevation">
             <TextView
                 android:id="@+id/student_name"
                 android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             app:cardCornerRadius="@dimen/cardview_default_radius"
             android:layout_margin="5dp"
             android:clickable="true"
-            app:cardElevation="6dp">
+            app:cardElevation="@dimen/cardview_default_elevation">
             <TextView
                 android:id="@+id/student_sex"
                 android:layout_width="match_parent"
@@ -79,7 +79,7 @@
             app:cardCornerRadius="@dimen/cardview_default_radius"
             android:layout_margin="5dp"
             android:clickable="true"
-            app:cardElevation="6dp">
+            app:cardElevation="@dimen/cardview_default_elevation">
             <TextView
                 android:id="@+id/student_dept"
                 android:layout_width="match_parent"
@@ -97,7 +97,7 @@
             app:cardCornerRadius="@dimen/cardview_default_radius"
             android:layout_margin="5dp"
             android:clickable="true"
-            app:cardElevation="6dp">
+            app:cardElevation="@dimen/cardview_default_elevation">
             <TextView
                 android:id="@+id/student_clo"
                 android:layout_width="match_parent"

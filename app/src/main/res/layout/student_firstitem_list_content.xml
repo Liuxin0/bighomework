@@ -8,9 +8,11 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardElevation="2dp">
+        android:layout_height="130dp"
+        android:layout_marginTop="1dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,6 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:maxLines="1"
                     android:gravity="center"
                     android:textColor="@color/colorPrimaryDark"
                     android:text="体育频道" />
@@ -45,9 +48,10 @@
                 android:id="@+id/student_firstitem_list_content_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginBottom="5dp"
+                android:maxLines="5"
                 android:text="爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育爆笑体育" />
 
         </LinearLayout>

@@ -2,13 +2,11 @@ package com.example.a1111.term4_homework.teacher.first;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.example.a1111.term4_homework.R;
@@ -21,6 +19,7 @@ import com.google.gson.Gson;
 
 import java.util.HashMap;
 
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
@@ -41,6 +40,11 @@ public class FirstItemDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.teacher_detail_toolbar);
         setSupportActionBar(toolbar);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
         title = intent.getStringExtra("title");
@@ -49,12 +53,15 @@ public class FirstItemDetailActivity extends AppCompatActivity {
 
         L.e("information", url);
 
-        jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.student_videoplayer);
+        jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.teacher_videoplayer);
+        Log.e("title",title);
+        Log.e("url",url);
         jcVideoPlayerStandard
                 .setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, title);
         jcVideoPlayerStandard.thumbImageView.setImageResource(R.mipmap.my_add);
 
-        TextView textView = (TextView) findViewById(R.id.student_video_subject);
+
+        TextView textView = (TextView) findViewById(R.id.teacher_video_subject);
         textView.setText("        " + subject);
 
         DataUtil util = new DataUtil("userinformation", getApplicationContext());
@@ -68,19 +75,7 @@ public class FirstItemDetailActivity extends AppCompatActivity {
         // For more information, see the Fragments API guide at:
         //
         // http://developer.android.com/guide/components/fragments.html
-        //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(FirstItemDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(FirstItemDetailFragment.ARG_ITEM_ID));
-            FirstItemDetailFragment fragment = new FirstItemDetailFragment();
-            fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
-                    .add(R.id.teacher_firstitem_detail_container, fragment)
-                    .commit();
-        }
+
     }
 
     private void upwatch(String userid, String videoid) {
@@ -118,5 +113,18 @@ public class FirstItemDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (JCVideoPlayer.backPress()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JCVideoPlayer.releaseAllVideos();
     }
 }
