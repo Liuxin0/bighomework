@@ -1,20 +1,29 @@
 package com.example.a1111.term4_homework.teacher.first;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.a1111.term4_homework.R;
-import com.example.a1111.term4_homework.teacher.first.dummy.DummyContent;
 
+import com.example.a1111.term4_homework.R;
+import com.example.a1111.term4_homework.interface_.HttpCallbackListener;
+import com.example.a1111.term4_homework.model.STHomeModel;
+import com.example.a1111.term4_homework.util.DataUtil;
+import com.example.a1111.term4_homework.util.HttpUtils;
+import com.example.a1111.term4_homework.util.L;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -31,40 +40,72 @@ public class FirstItemListFragment extends Fragment {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
+    View recyclerView;
+    SimpleItemRecyclerViewAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_firstitem_list_teacher,container);
+        View view = inflater.inflate(R.layout.fragment_firstitem_list_teacher, container);
 
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.teacher_first_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "欢迎使用云课堂>_<", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
-        View recyclerView = view.findViewById(R.id.teacher_firstitem_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        recyclerView = view.findViewById(R.id.teacher_firstitem_list);
 
-        if (view.findViewById(R.id.teacher_firstitem_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
+        getData();
 
         return view;
     }
 
+    //
+    private void getData() {
+        HashMap<String, String> map = new HashMap<>();
+        DataUtil util = new DataUtil("userinformation", getActivity());
+        map.put("userid", util.getData("userid", ""));
+        HttpUtils.get("http://www.baiguoqing.com:8080/Dazuoye/home", map, new HttpCallbackListener.StringCallBack() {
+            @Override
+            public void OnRequest(String response) {
+                STHomeModel model = new Gson().fromJson(response, STHomeModel.class);
+                if (model.getState() != 0) {
+                    adapter = new SimpleItemRecyclerViewAdapter(model.getVideos());
+                    callback.success();
+                } else {
+                    L.e("home", model.getMsg());
+                }
+            }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+            @Override
+            public void OnFailure(Exception e) {
+                L.e("home", e.getLocalizedMessage());
+            }
+        });
     }
+
+
+    interface Callback {
+        void success();
+    }
+
+    Callback callback = new Callback() {
+        @Override
+        public void success() {
+            ((RecyclerView) recyclerView).setAdapter(adapter);
+        }
+    };
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<STHomeModel.VideosBean> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<STHomeModel.VideosBean> items) {
             mValues = items;
         }
 
@@ -76,29 +117,22 @@ public class FirstItemListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getVideoid() + "");
+            holder.mContentView.setText("<<" + mValues.get(position).getTitle() + ">>");
+            holder.msubject.setText(mValues.get(position).getSubject() + "");
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(FirstItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        FirstItemDetailFragment fragment = new FirstItemDetailFragment();
-                        fragment.setArguments(arguments);
-                        getActivity().getFragmentManager().beginTransaction()
-                                .replace(R.id.teacher_firstitem_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, FirstItemDetailActivity.class);
-                        intent.putExtra(FirstItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                        context.startActivity(intent);
-                    }
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, FirstItemDetailActivity.class);
+                    intent.putExtra("videoid", mValues.get(position).getVideoid() + "");
+                    intent.putExtra("title", mValues.get(position).getTitle() + "");
+                    intent.putExtra("url", mValues.get(position).getURL() + "");
+                    intent.putExtra("subject", mValues.get(position).getSubject() + "");
+                    context.startActivity(intent);
                 }
             });
         }
@@ -112,13 +146,15 @@ public class FirstItemListFragment extends Fragment {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public final TextView msubject;
+            public STHomeModel.VideosBean mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.teacher_firstitem_list_content_id);
                 mContentView = (TextView) view.findViewById(R.id.teacher_firstitem_list_content_main_content);
+                msubject = (TextView) view.findViewById(R.id.teacher_firstitem_list_content_subject);
             }
 
             @Override
