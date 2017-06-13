@@ -2,10 +2,12 @@ package com.example.a1111.term4_homework.student.first;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -45,6 +47,7 @@ public class FirstItemListFragment extends Fragment {
      */
     View recyclerView;
     SimpleItemRecyclerViewAdapter adapter;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -63,6 +66,15 @@ public class FirstItemListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.firstitem_list);
 
         getData();
+
+        swipeRefreshLayout= (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(Color.BLUE);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getData();
+            }
+        });
 
         return view;
     }
@@ -99,6 +111,7 @@ public class FirstItemListFragment extends Fragment {
     Callback callback = new Callback() {
         @Override
         public void success() {
+            swipeRefreshLayout.setRefreshing(false);
             ((RecyclerView) recyclerView).setAdapter(adapter);
         }
     };

@@ -12,7 +12,14 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.a1111.term4_homework.R;
+import com.example.a1111.term4_homework.interface_.HttpCallbackListener;
+import com.example.a1111.term4_homework.model.BaseModel;
+import com.example.a1111.term4_homework.util.DataUtil;
+import com.example.a1111.term4_homework.util.HttpUtils;
 import com.example.a1111.term4_homework.util.L;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
 
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
@@ -26,7 +33,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 public class FirstItemDetailActivity extends AppCompatActivity {
 
     private JCVideoPlayerStandard jcVideoPlayerStandard;
-    private String url, title, videoid,subject;
+    private String url, title, videoid, subject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +57,33 @@ public class FirstItemDetailActivity extends AppCompatActivity {
                 .setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, title);
         jcVideoPlayerStandard.thumbImageView.setImageResource(R.mipmap.my_add);
 
-        TextView textView= (TextView) findViewById(R.id.student_video_subject);
-        textView.setText("        "+subject);
+        TextView textView = (TextView) findViewById(R.id.student_video_subject);
+        textView.setText("        " + subject);
 
+        DataUtil util = new DataUtil("userinformation", getApplicationContext());
+        upwatch(util.getData("userid", ""), videoid);
+
+    }
+
+    private void upwatch(String userid, String videoid) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("userid", userid);
+        map.put("videoid", videoid);
+        HttpUtils.post("http://www.baiguoqing.com:8080/Dazuoye/videolog", map, new HttpCallbackListener.StringCallBack() {
+            @Override
+            public void OnRequest(String response) {
+                BaseModel model = new Gson().fromJson(response, BaseModel.class);
+                if (model.getState() != 0) {
+
+                }
+            }
+
+            @Override
+            public void OnFailure(Exception e) {
+                if (e != null)
+                    L.e("informaton", e.getLocalizedMessage());
+            }
+        });
     }
 
     @Override
@@ -72,6 +103,7 @@ public class FirstItemDetailActivity extends AppCompatActivity {
         }
         super.onBackPressed();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
